@@ -133,19 +133,17 @@ function App() {
   };
 
   const handleShapeAdd = (shapeData: Omit<Shape, "id" | "sizeInInches">) => {
-    if (
-      !activeFloorPlan ||
-      !activeFloorPlan.scale ||
-      !activeFloorPlan.originalImageDimensions
-    )
-      return;
+    if (!activeFloorPlan || !activeFloorPlan.originalImageDimensions) return;
+
+    const scale = activeFloorPlan.scale;
+    if (!scale) return;
 
     const shape: Shape = {
       ...shapeData,
       id: uuidv4(),
       sizeInInches: {
-        width: shapeData.size.width / activeFloorPlan.scale,
-        height: shapeData.size.height / activeFloorPlan.scale,
+        width: shapeData.size.width / scale,
+        height: shapeData.size.height / scale,
       },
     };
 
@@ -182,12 +180,10 @@ function App() {
     widthInInches: number,
     heightInInches: number
   ) => {
-    if (
-      !activeFloorPlan ||
-      !activeFloorPlan.scale ||
-      !activeFloorPlan.originalImageDimensions
-    )
-      return;
+    if (!activeFloorPlan || !activeFloorPlan.originalImageDimensions) return;
+
+    const scale = activeFloorPlan.scale;
+    if (!scale) return;
 
     const updatedFloorPlans = appState.floorPlans.map((fp) =>
       fp.id === activeFloorPlan.id
@@ -198,8 +194,8 @@ function App() {
                 ? {
                     ...shape,
                     size: {
-                      width: widthInInches * activeFloorPlan.scale,
-                      height: heightInInches * activeFloorPlan.scale,
+                      width: widthInInches * scale,
+                      height: heightInInches * scale,
                     },
                     sizeInInches: {
                       width: widthInInches,
