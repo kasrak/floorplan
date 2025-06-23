@@ -24,7 +24,7 @@ export const FloorPlanList: React.FC<FloorPlanListProps> = ({
           onClick={onAddFloorPlan}
           className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
-          Add New
+          + New
         </button>
       </div>
       <div className="space-y-2">

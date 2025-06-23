@@ -1,5 +1,6 @@
 import React from "react";
 import type { Shape } from "../types";
+import { DimensionInput } from "./DimensionInput";
 
 interface ShapePanelProps {
   shape: Shape | null;
@@ -28,17 +29,15 @@ export const ShapePanel: React.FC<ShapePanelProps> = ({
     );
   }
 
-  const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const widthInInches = parseFloat(e.target.value);
-    if (!isNaN(widthInInches) && widthInInches > 0) {
-      onUpdateSize(shape.id, widthInInches, shape.sizeInInches.height);
+  const handleWidthChange = ({ inches }: { originalInput: string; inches: number }) => {
+    if (inches > 0) {
+      onUpdateSize(shape.id, inches, shape.sizeInInches.height);
     }
   };
 
-  const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const heightInInches = parseFloat(e.target.value);
-    if (!isNaN(heightInInches) && heightInInches > 0) {
-      onUpdateSize(shape.id, shape.sizeInInches.width, heightInInches);
+  const handleHeightChange = ({ inches }: { originalInput: string; inches: number }) => {
+    if (inches > 0) {
+      onUpdateSize(shape.id, shape.sizeInInches.width, inches);
     }
   };
 
@@ -54,27 +53,33 @@ export const ShapePanel: React.FC<ShapePanelProps> = ({
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Width (inches)
+            Width
           </label>
-          <input
-            type="number"
-            step="0.1"
-            value={shape.sizeInInches.width.toFixed(1)}
-            onChange={handleWidthChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          <DimensionInput
+            value={shape.sizeInInches.width}
+            onInput={handleWidthChange}
+            placeholder={'e.g., 36, 36", 3\''}
           />
+          <p className="mt-1 text-xs text-gray-600">
+            {shape.sizeInInches.width >= 12 
+              ? `${Math.floor(shape.sizeInInches.width / 12)}'${shape.sizeInInches.width % 12 > 0 ? (shape.sizeInInches.width % 12).toFixed(1) + '"' : ''}`
+              : `${shape.sizeInInches.width.toFixed(1)}"`}
+          </p>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Height (inches)
+            Height
           </label>
-          <input
-            type="number"
-            step="0.1"
-            value={shape.sizeInInches.height.toFixed(1)}
-            onChange={handleHeightChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          <DimensionInput
+            value={shape.sizeInInches.height}
+            onInput={handleHeightChange}
+            placeholder={'e.g., 24, 24", 2\''}
           />
+          <p className="mt-1 text-xs text-gray-600">
+            {shape.sizeInInches.height >= 12 
+              ? `${Math.floor(shape.sizeInInches.height / 12)}'${shape.sizeInInches.height % 12 > 0 ? (shape.sizeInInches.height % 12).toFixed(1) + '"' : ''}`
+              : `${shape.sizeInInches.height.toFixed(1)}"`}
+          </p>
         </div>
         <button
           onClick={() => onDelete(shape.id)}

@@ -98,7 +98,12 @@ function App() {
   };
 
   const handleCalibrationConfirm = (lengthInInches: number) => {
-    if (!activeFloorPlan || !calibrationPoints || !activeFloorPlan.originalImageDimensions) return;
+    if (
+      !activeFloorPlan ||
+      !calibrationPoints ||
+      !activeFloorPlan.originalImageDimensions
+    )
+      return;
 
     // Calculate pixel distance based on original image dimensions
     const pixelDistance = Math.sqrt(
@@ -128,7 +133,12 @@ function App() {
   };
 
   const handleShapeAdd = (shapeData: Omit<Shape, "id" | "sizeInInches">) => {
-    if (!activeFloorPlan || !activeFloorPlan.scale || !activeFloorPlan.originalImageDimensions) return;
+    if (
+      !activeFloorPlan ||
+      !activeFloorPlan.scale ||
+      !activeFloorPlan.originalImageDimensions
+    )
+      return;
 
     const shape: Shape = {
       ...shapeData,
@@ -172,7 +182,12 @@ function App() {
     widthInInches: number,
     heightInInches: number
   ) => {
-    if (!activeFloorPlan || !activeFloorPlan.scale || !activeFloorPlan.originalImageDimensions) return;
+    if (
+      !activeFloorPlan ||
+      !activeFloorPlan.scale ||
+      !activeFloorPlan.originalImageDimensions
+    )
+      return;
 
     const updatedFloorPlans = appState.floorPlans.map((fp) =>
       fp.id === activeFloorPlan.id
@@ -213,7 +228,10 @@ function App() {
     setSelectedShapeId(null);
   };
 
-  const handleImageDimensionsLoaded = (dimensions: { width: number; height: number }) => {
+  const handleImageDimensionsLoaded = (dimensions: {
+    width: number;
+    height: number;
+  }) => {
     if (!activeFloorPlan) return;
 
     const updatedFloorPlans = appState.floorPlans.map((fp) =>
@@ -227,10 +245,6 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col bg-gray-50">
-      <header className="bg-blue-600 text-white p-4">
-        <h1 className="text-2xl font-bold">Floor Plan Designer</h1>
-      </header>
-
       <div className="flex flex-1 overflow-hidden">
         <FloorPlanList
           floorPlans={appState.floorPlans}
