@@ -29,7 +29,7 @@ export const ShapesList: React.FC<ShapesListProps> = ({
             className={`p-3 rounded cursor-pointer transition-colors ${
               selectedShapeId === shape.id
                 ? "bg-blue-100 border border-blue-400"
-                : "bg-white hover:bg-gray-50"
+                : "bg-white hover:bg-gray-50 border border-white"
             }`}
             onClick={() => onSelectShape(shape.id)}
           >

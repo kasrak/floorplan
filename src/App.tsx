@@ -143,8 +143,8 @@ function App() {
       ...shapeData,
       id: uuidv4(),
       sizeInInches: {
-        width: shapeData.size.width / scale,
-        height: shapeData.size.height / scale,
+        width: Math.round(shapeData.size.width / scale),
+        height: Math.round(shapeData.size.height / scale),
       },
     };
 
@@ -291,6 +291,7 @@ function App() {
 
                 {activeFloorPlan.imageUrl && (
                   <ShapePanel
+                    key={selectedShape?.id}
                     shape={selectedShape}
                     scale={activeFloorPlan.scale}
                     onUpdateSize={handleShapeUpdateSize}

@@ -34,7 +34,7 @@ export const FloorPlanList: React.FC<FloorPlanListProps> = ({
             className={`p-3 rounded cursor-pointer flex justify-between items-center ${
               activeFloorPlanId === floorPlan.id
                 ? "bg-blue-100 border border-blue-400"
-                : "bg-white hover:bg-gray-50"
+                : "bg-white hover:bg-gray-50 border border-white"
             }`}
             onClick={() => onSelectFloorPlan(floorPlan.id)}
           >

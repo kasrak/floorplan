@@ -29,13 +29,23 @@ export const ShapePanel: React.FC<ShapePanelProps> = ({
     );
   }
 
-  const handleWidthChange = ({ inches }: { originalInput: string; inches: number }) => {
+  const handleWidthChange = ({
+    inches,
+  }: {
+    originalInput: string;
+    inches: number;
+  }) => {
     if (inches > 0) {
       onUpdateSize(shape.id, inches, shape.sizeInInches.height);
     }
   };
 
-  const handleHeightChange = ({ inches }: { originalInput: string; inches: number }) => {
+  const handleHeightChange = ({
+    inches,
+  }: {
+    originalInput: string;
+    inches: number;
+  }) => {
     if (inches > 0) {
       onUpdateSize(shape.id, shape.sizeInInches.width, inches);
     }
@@ -58,11 +68,15 @@ export const ShapePanel: React.FC<ShapePanelProps> = ({
           <DimensionInput
             value={shape.sizeInInches.width}
             onInput={handleWidthChange}
-            placeholder={'e.g., 36, 36", 3\''}
+            placeholder={"e.g., 36, 36\", 3'"}
           />
           <p className="mt-1 text-xs text-gray-600">
-            {shape.sizeInInches.width >= 12 
-              ? `${Math.floor(shape.sizeInInches.width / 12)}'${shape.sizeInInches.width % 12 > 0 ? (shape.sizeInInches.width % 12).toFixed(1) + '"' : ''}`
+            {shape.sizeInInches.width >= 12
+              ? `${Math.floor(shape.sizeInInches.width / 12)}'${
+                  shape.sizeInInches.width % 12 > 0
+                    ? (shape.sizeInInches.width % 12).toFixed(1) + '"'
+                    : ""
+                }`
               : `${shape.sizeInInches.width.toFixed(1)}"`}
           </p>
         </div>
@@ -73,11 +87,15 @@ export const ShapePanel: React.FC<ShapePanelProps> = ({
           <DimensionInput
             value={shape.sizeInInches.height}
             onInput={handleHeightChange}
-            placeholder={'e.g., 24, 24", 2\''}
+            placeholder={"e.g., 24, 24\", 2'"}
           />
           <p className="mt-1 text-xs text-gray-600">
-            {shape.sizeInInches.height >= 12 
-              ? `${Math.floor(shape.sizeInInches.height / 12)}'${shape.sizeInInches.height % 12 > 0 ? (shape.sizeInInches.height % 12).toFixed(1) + '"' : ''}`
+            {shape.sizeInInches.height >= 12
+              ? `${Math.floor(shape.sizeInInches.height / 12)}'${
+                  shape.sizeInInches.height % 12 > 0
+                    ? (shape.sizeInInches.height % 12).toFixed(1) + '"'
+                    : ""
+                }`
               : `${shape.sizeInInches.height.toFixed(1)}"`}
           </p>
         </div>
@@ -85,7 +103,7 @@ export const ShapePanel: React.FC<ShapePanelProps> = ({
           onClick={() => onDelete(shape.id)}
           className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
         >
-          Delete Shape
+          Delete shape
         </button>
       </div>
     </div>
