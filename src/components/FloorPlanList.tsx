@@ -7,6 +7,7 @@ interface FloorPlanListProps {
   onSelectFloorPlan: (id: string) => void;
   onAddFloorPlan: () => void;
   onDeleteFloorPlan: (id: string) => void;
+  onDuplicateFloorPlan: (id: string) => void;
 }
 
 export const FloorPlanList: React.FC<FloorPlanListProps> = ({
@@ -15,6 +16,7 @@ export const FloorPlanList: React.FC<FloorPlanListProps> = ({
   onSelectFloorPlan,
   onAddFloorPlan,
   onDeleteFloorPlan,
+  onDuplicateFloorPlan,
 }) => {
   return (
     <div className="p-4 border-b border-gray-300 overflow-y-auto">
@@ -38,16 +40,27 @@ export const FloorPlanList: React.FC<FloorPlanListProps> = ({
             }`}
             onClick={() => onSelectFloorPlan(floorPlan.id)}
           >
-            <span className="truncate">{floorPlan.name}</span>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onDeleteFloorPlan(floorPlan.id);
-              }}
-              className="text-red-500 hover:text-red-700 text-sm"
-            >
-              Delete
-            </button>
+            <span className="truncate flex-1">{floorPlan.name}</span>
+            <div className="flex gap-2 ml-2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDuplicateFloorPlan(floorPlan.id);
+                }}
+                className="text-blue-500 hover:text-blue-700 text-sm"
+              >
+                Duplicate
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteFloorPlan(floorPlan.id);
+                }}
+                className="text-red-500 hover:text-red-700 text-sm"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
         {floorPlans.length === 0 && (

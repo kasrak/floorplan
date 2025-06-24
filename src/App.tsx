@@ -67,6 +67,46 @@ function App() {
     });
   };
 
+  const handleDuplicateFloorPlan = (id: string) => {
+    const floorPlanToDuplicate = appState.floorPlans.find((fp) => fp.id === id);
+    if (!floorPlanToDuplicate) return;
+
+    // Find the base name and number for the duplicate
+    const nameMatch = floorPlanToDuplicate.name.match(/^(.+?)(\s+\(copy\s*(\d*)\))?$/);
+    const baseName = nameMatch ? nameMatch[1] : floorPlanToDuplicate.name;
+    
+    // Find the highest copy number for this base name
+    let maxCopyNumber = 0;
+    appState.floorPlans.forEach((fp) => {
+      const match = fp.name.match(new RegExp(`^${baseName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\(copy\\s*(\\d*)\\)$`));
+      if (match) {
+        const copyNum = match[1] ? parseInt(match[1]) : 1;
+        maxCopyNumber = Math.max(maxCopyNumber, copyNum);
+      }
+    });
+
+    const newName = maxCopyNumber === 0 
+      ? `${baseName} (copy)` 
+      : `${baseName} (copy ${maxCopyNumber + 1})`;
+
+    const duplicatedFloorPlan: FloorPlan = {
+      ...floorPlanToDuplicate,
+      id: uuidv4(),
+      name: newName,
+      shapes: floorPlanToDuplicate.shapes.map((shape) => ({
+        ...shape,
+        id: uuidv4(),
+      })),
+    };
+
+    setAppState({
+      ...appState,
+      floorPlans: [...appState.floorPlans, duplicatedFloorPlan],
+      activeFloorPlanId: duplicatedFloorPlan.id,
+    });
+    setSelectedShapeId(null);
+  };
+
   const handleSelectFloorPlan = (id: string) => {
     setAppState({ ...appState, activeFloorPlanId: id });
     setSelectedShapeId(null);
@@ -269,6 +309,7 @@ function App() {
             onSelectFloorPlan={handleSelectFloorPlan}
             onAddFloorPlan={handleAddFloorPlan}
             onDeleteFloorPlan={handleDeleteFloorPlan}
+            onDuplicateFloorPlan={handleDuplicateFloorPlan}
           />
           {activeFloorPlan && (
             <ShapesList
