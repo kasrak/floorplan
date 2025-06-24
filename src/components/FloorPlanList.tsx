@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { FloorPlan } from "../types";
 
 interface FloorPlanListProps {
@@ -8,6 +8,7 @@ interface FloorPlanListProps {
   onAddFloorPlan: () => void;
   onDeleteFloorPlan: (id: string) => void;
   onDuplicateFloorPlan: (id: string) => void;
+  onRenameFloorPlan: (id: string, newName: string) => void;
 }
 
 export const FloorPlanList: React.FC<FloorPlanListProps> = ({
@@ -17,7 +18,35 @@ export const FloorPlanList: React.FC<FloorPlanListProps> = ({
   onAddFloorPlan,
   onDeleteFloorPlan,
   onDuplicateFloorPlan,
+  onRenameFloorPlan,
 }) => {
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState("");
+
+  const handleStartEdit = (floorPlan: FloorPlan) => {
+    setEditingId(floorPlan.id);
+    setEditingName(floorPlan.name);
+  };
+
+  const handleSaveEdit = () => {
+    if (editingId && editingName.trim()) {
+      onRenameFloorPlan(editingId, editingName.trim());
+      setEditingId(null);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditingName("");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSaveEdit();
+    } else if (e.key === "Escape") {
+      handleCancelEdit();
+    }
+  };
   return (
     <div className="p-4 border-b border-gray-300 overflow-y-auto">
       <div className="flex justify-between items-center mb-4">
@@ -40,25 +69,55 @@ export const FloorPlanList: React.FC<FloorPlanListProps> = ({
             }`}
             onClick={() => onSelectFloorPlan(floorPlan.id)}
           >
-            <div className="truncate flex-1">{floorPlan.name}</div>
+            {editingId === floorPlan.id ? (
+              <input
+                type="text"
+                value={editingName}
+                onChange={(e) => setEditingName(e.target.value)}
+                onKeyDown={handleKeyDown}
+                onBlur={handleSaveEdit}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full px-2 py-1 border border-blue-400 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                autoFocus
+              />
+            ) : (
+              <div
+                className="truncate flex-1"
+                onDoubleClick={(e) => {
+                  e.stopPropagation();
+                  handleStartEdit(floorPlan);
+                }}
+              >
+                {floorPlan.name}
+              </div>
+            )}
             <div className="flex gap-2 mt-2">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onDuplicateFloorPlan(floorPlan.id);
                 }}
-                className="text-blue-500 hover:text-blue-700 text-sm bg-gray-100 px-2 py-1 rounded"
+                className="text-sm bg-gray-100 px-2 py-1 rounded"
               >
                 Duplicate
               </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
+                  handleStartEdit(floorPlan);
+                }}
+                className="text-sm bg-gray-100 px-2 py-1 rounded"
+              >
+                ✏️
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
                   onDeleteFloorPlan(floorPlan.id);
                 }}
-                className="text-red-500 hover:text-red-700 text-sm bg-gray-100 px-2 py-1 rounded"
+                className="text-sm bg-gray-100 hover:bg-red-300 px-2 py-1 rounded"
               >
-                Delete
+                🗑️
               </button>
             </div>
           </div>

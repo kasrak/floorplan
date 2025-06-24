@@ -112,6 +112,14 @@ function App() {
     setSelectedShapeId(null);
   };
 
+  const handleRenameFloorPlan = (id: string, newName: string) => {
+    const updatedFloorPlans = appState.floorPlans.map((fp) =>
+      fp.id === id ? { ...fp, name: newName } : fp
+    );
+
+    setAppState({ ...appState, floorPlans: updatedFloorPlans });
+  };
+
   const handleImageUpload = (imageUrl: string) => {
     if (!activeFloorPlan) return;
 
@@ -310,6 +318,7 @@ function App() {
             onAddFloorPlan={handleAddFloorPlan}
             onDeleteFloorPlan={handleDeleteFloorPlan}
             onDuplicateFloorPlan={handleDuplicateFloorPlan}
+            onRenameFloorPlan={handleRenameFloorPlan}
           />
           {activeFloorPlan && (
             <ShapesList
