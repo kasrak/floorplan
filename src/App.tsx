@@ -133,15 +133,17 @@ function App() {
     setCalibrationPoints(null);
   };
 
-  const handleShapeAdd = (shapeData: Omit<Shape, "id" | "sizeInInches">) => {
+  const handleShapeAdd = (shapeData: Omit<Shape, "id" | "name" | "sizeInInches">) => {
     if (!activeFloorPlan || !activeFloorPlan.originalImageDimensions) return;
 
     const scale = activeFloorPlan.scale;
     if (!scale) return;
 
+    const shapeNumber = activeFloorPlan.shapes.length + 1;
     const shape: Shape = {
       ...shapeData,
       id: uuidv4(),
+      name: `Shape ${shapeNumber}`,
       sizeInInches: {
         width: Math.round(shapeData.size.width / scale),
         height: Math.round(shapeData.size.height / scale),
@@ -204,6 +206,23 @@ function App() {
                     },
                   }
                 : shape
+            ),
+          }
+        : fp
+    );
+
+    setAppState({ ...appState, floorPlans: updatedFloorPlans });
+  };
+
+  const handleShapeUpdateName = (id: string, name: string) => {
+    if (!activeFloorPlan) return;
+
+    const updatedFloorPlans = appState.floorPlans.map((fp) =>
+      fp.id === activeFloorPlan.id
+        ? {
+            ...fp,
+            shapes: fp.shapes.map((shape) =>
+              shape.id === id ? { ...shape, name } : shape
             ),
           }
         : fp
@@ -295,6 +314,7 @@ function App() {
                     shape={selectedShape}
                     scale={activeFloorPlan.scale}
                     onUpdateSize={handleShapeUpdateSize}
+                    onUpdateName={handleShapeUpdateName}
                     onDelete={handleShapeDelete}
                   />
                 )}

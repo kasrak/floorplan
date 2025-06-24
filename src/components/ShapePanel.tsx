@@ -10,6 +10,7 @@ interface ShapePanelProps {
     widthInInches: number,
     heightInInches: number
   ) => void;
+  onUpdateName: (id: string, name: string) => void;
   onDelete: (id: string) => void;
 }
 
@@ -17,6 +18,7 @@ export const ShapePanel: React.FC<ShapePanelProps> = ({
   shape,
   scale,
   onUpdateSize,
+  onUpdateName,
   onDelete,
 }) => {
   if (!shape || !scale) {
@@ -55,6 +57,17 @@ export const ShapePanel: React.FC<ShapePanelProps> = ({
     <div className="w-64 bg-gray-100 p-4 border-l border-gray-300">
       <h3 className="text-lg font-semibold mb-4">Shape Properties</h3>
       <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Name
+          </label>
+          <input
+            type="text"
+            value={shape.name}
+            onChange={(e) => onUpdateName(shape.id, e.target.value)}
+            className="w-full px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Type

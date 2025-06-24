@@ -5,6 +5,7 @@ export interface Point {
 
 export interface Shape {
   id: string;
+  name: string;
   type: 'rectangle' | 'oval';
   position: Point;
   size: { width: number; height: number };

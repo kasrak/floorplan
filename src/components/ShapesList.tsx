@@ -13,10 +13,7 @@ export const ShapesList: React.FC<ShapesListProps> = ({
   onSelectShape,
 }) => {
   const getShapeDisplayName = (shape: Shape) => {
-    const typeLabel = shape.type === "rectangle" ? "Rectangle" : "Oval";
-    const width = shape.sizeInInches.width.toFixed(1);
-    const height = shape.sizeInInches.height.toFixed(1);
-    return `${typeLabel} (${width}" × ${height}")`;
+    return shape.name;
   };
 
   return (
