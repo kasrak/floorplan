@@ -33,21 +33,21 @@ export const FloorPlanList: React.FC<FloorPlanListProps> = ({
         {floorPlans.map((floorPlan) => (
           <div
             key={floorPlan.id}
-            className={`p-3 rounded cursor-pointer flex justify-between items-center ${
+            className={`p-3 rounded cursor-pointer flex flex-col ${
               activeFloorPlanId === floorPlan.id
                 ? "bg-blue-100 border border-blue-400"
                 : "bg-white hover:bg-gray-50 border border-white"
             }`}
             onClick={() => onSelectFloorPlan(floorPlan.id)}
           >
-            <span className="truncate flex-1">{floorPlan.name}</span>
-            <div className="flex gap-2 ml-2">
+            <div className="truncate flex-1">{floorPlan.name}</div>
+            <div className="flex gap-2 mt-2">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onDuplicateFloorPlan(floorPlan.id);
                 }}
-                className="text-blue-500 hover:text-blue-700 text-sm"
+                className="text-blue-500 hover:text-blue-700 text-sm bg-gray-100 px-2 py-1 rounded"
               >
                 Duplicate
               </button>
@@ -56,7 +56,7 @@ export const FloorPlanList: React.FC<FloorPlanListProps> = ({
                   e.stopPropagation();
                   onDeleteFloorPlan(floorPlan.id);
                 }}
-                className="text-red-500 hover:text-red-700 text-sm"
+                className="text-red-500 hover:text-red-700 text-sm bg-gray-100 px-2 py-1 rounded"
               >
                 Delete
               </button>

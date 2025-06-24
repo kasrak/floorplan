@@ -53,9 +53,14 @@ export const ShapePanel: React.FC<ShapePanelProps> = ({
     }
   };
 
+  const handleRotate = () => {
+    // Swap width and height to rotate by 90 degrees
+    onUpdateSize(shape.id, shape.sizeInInches.height, shape.sizeInInches.width);
+  };
+
   return (
     <div className="w-64 bg-gray-100 p-4 border-l border-gray-300">
-      <h3 className="text-lg font-semibold mb-4">Shape Properties</h3>
+      <h3 className="text-lg font-semibold mb-4 capitalize">{shape.type}</h3>
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -67,12 +72,6 @@ export const ShapePanel: React.FC<ShapePanelProps> = ({
             onChange={(e) => onUpdateName(shape.id, e.target.value)}
             className="w-full px-3 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Type
-          </label>
-          <p className="capitalize">{shape.type}</p>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -111,6 +110,17 @@ export const ShapePanel: React.FC<ShapePanelProps> = ({
                 }`
               : `${shape.sizeInInches.height.toFixed(1)}"`}
           </p>
+        </div>
+        <div>
+          <div className="flex gap-2">
+            <button
+              onClick={handleRotate}
+              className="flex-1 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+              title="Rotate 90° left"
+            >
+              ↺ Rotate
+            </button>
+          </div>
         </div>
         <button
           onClick={() => onDelete(shape.id)}
