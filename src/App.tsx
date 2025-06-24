@@ -242,13 +242,15 @@ function App() {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       <div className="flex flex-1 overflow-hidden">
-        <FloorPlanList
-          floorPlans={appState.floorPlans}
-          activeFloorPlanId={appState.activeFloorPlanId}
-          onSelectFloorPlan={handleSelectFloorPlan}
-          onAddFloorPlan={handleAddFloorPlan}
-          onDeleteFloorPlan={handleDeleteFloorPlan}
-        />
+        <div className="w-64 bg-gray-100 border-r border-gray-300">
+          <FloorPlanList
+            floorPlans={appState.floorPlans}
+            activeFloorPlanId={appState.activeFloorPlanId}
+            onSelectFloorPlan={handleSelectFloorPlan}
+            onAddFloorPlan={handleAddFloorPlan}
+            onDeleteFloorPlan={handleDeleteFloorPlan}
+          />
+        </div>
 
         <div className="flex-1 flex flex-col">
           {activeFloorPlan && (
