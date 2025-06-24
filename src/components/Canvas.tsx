@@ -9,7 +9,10 @@ interface CanvasProps {
   onShapeAdd: (shape: Omit<Shape, "id" | "sizeInInches">) => void;
   onShapeSelect: (id: string | null) => void;
   onShapeUpdate: (id: string, position: Point) => void;
-  onImageDimensionsLoaded?: (dimensions: { width: number; height: number }) => void;
+  onImageDimensionsLoaded?: (dimensions: {
+    width: number;
+    height: number;
+  }) => void;
 }
 
 export const Canvas: React.FC<CanvasProps> = ({
@@ -33,51 +36,85 @@ export const Canvas: React.FC<CanvasProps> = ({
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   // Convert stored coordinates (relative to original image) to canvas coordinates
-  const toCanvasCoords = useCallback((point: Point): Point => {
-    if (!floorPlan.originalImageDimensions) return point;
-    return {
-      x: (point.x / floorPlan.originalImageDimensions.width) * canvasSize.width,
-      y: (point.y / floorPlan.originalImageDimensions.height) * canvasSize.height,
-    };
-  }, [floorPlan.originalImageDimensions, canvasSize]);
+  const toCanvasCoords = useCallback(
+    (point: Point): Point => {
+      if (!floorPlan.originalImageDimensions) return point;
+      return {
+        x:
+          (point.x / floorPlan.originalImageDimensions.width) *
+          canvasSize.width,
+        y:
+          (point.y / floorPlan.originalImageDimensions.height) *
+          canvasSize.height,
+      };
+    },
+    [floorPlan.originalImageDimensions, canvasSize]
+  );
 
   // Convert canvas coordinates to stored coordinates (relative to original image)
-  const toStoredCoords = useCallback((point: Point): Point => {
-    if (!floorPlan.originalImageDimensions) return point;
-    return {
-      x: (point.x / canvasSize.width) * floorPlan.originalImageDimensions.width,
-      y: (point.y / canvasSize.height) * floorPlan.originalImageDimensions.height,
-    };
-  }, [floorPlan.originalImageDimensions, canvasSize]);
+  const toStoredCoords = useCallback(
+    (point: Point): Point => {
+      if (!floorPlan.originalImageDimensions) return point;
+      return {
+        x:
+          (point.x / canvasSize.width) *
+          floorPlan.originalImageDimensions.width,
+        y:
+          (point.y / canvasSize.height) *
+          floorPlan.originalImageDimensions.height,
+      };
+    },
+    [floorPlan.originalImageDimensions, canvasSize]
+  );
 
   // Convert size from stored to canvas
-  const toCanvasSize = useCallback((size: { width: number; height: number }): { width: number; height: number } => {
-    if (!floorPlan.originalImageDimensions) return size;
-    return {
-      width: (size.width / floorPlan.originalImageDimensions.width) * canvasSize.width,
-      height: (size.height / floorPlan.originalImageDimensions.height) * canvasSize.height,
-    };
-  }, [floorPlan.originalImageDimensions, canvasSize]);
+  const toCanvasSize = useCallback(
+    (size: {
+      width: number;
+      height: number;
+    }): { width: number; height: number } => {
+      if (!floorPlan.originalImageDimensions) return size;
+      return {
+        width:
+          (size.width / floorPlan.originalImageDimensions.width) *
+          canvasSize.width,
+        height:
+          (size.height / floorPlan.originalImageDimensions.height) *
+          canvasSize.height,
+      };
+    },
+    [floorPlan.originalImageDimensions, canvasSize]
+  );
 
   // Convert size from canvas to stored
-  const toStoredSize = useCallback((size: { width: number; height: number }): { width: number; height: number } => {
-    if (!floorPlan.originalImageDimensions) return size;
-    return {
-      width: (size.width / canvasSize.width) * floorPlan.originalImageDimensions.width,
-      height: (size.height / canvasSize.height) * floorPlan.originalImageDimensions.height,
-    };
-  }, [floorPlan.originalImageDimensions, canvasSize]);
+  const toStoredSize = useCallback(
+    (size: {
+      width: number;
+      height: number;
+    }): { width: number; height: number } => {
+      if (!floorPlan.originalImageDimensions) return size;
+      return {
+        width:
+          (size.width / canvasSize.width) *
+          floorPlan.originalImageDimensions.width,
+        height:
+          (size.height / canvasSize.height) *
+          floorPlan.originalImageDimensions.height,
+      };
+    },
+    [floorPlan.originalImageDimensions, canvasSize]
+  );
 
   useEffect(() => {
     const image = new Image();
     image.onload = () => {
       imageRef.current = image;
-      
+
       // Store original image dimensions if not already stored
       if (!floorPlan.originalImageDimensions && onImageDimensionsLoaded) {
         onImageDimensionsLoaded({ width: image.width, height: image.height });
       }
-      
+
       if (canvasRef.current) {
         const containerWidth =
           canvasRef.current.parentElement?.clientWidth || 800;
@@ -97,7 +134,11 @@ export const Canvas: React.FC<CanvasProps> = ({
       }
     };
     image.src = floorPlan.imageUrl;
-  }, [floorPlan.imageUrl, floorPlan.originalImageDimensions, onImageDimensionsLoaded]);
+  }, [
+    floorPlan.imageUrl,
+    floorPlan.originalImageDimensions,
+    onImageDimensionsLoaded,
+  ]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -222,7 +263,7 @@ export const Canvas: React.FC<CanvasProps> = ({
       const shape = floorPlan.shapes[i];
       const canvasPos = toCanvasCoords(shape.position);
       const canvasSize = toCanvasSize(shape.size);
-      
+
       if (shape.type === "rectangle") {
         if (
           point.x >= canvasPos.x &&
@@ -302,8 +343,9 @@ export const Canvas: React.FC<CanvasProps> = ({
         if (width > 5 && height > 5) {
           const storedSize = toStoredSize({ width, height });
           const storedPos = toStoredCoords({ x, y });
-          
+
           onShapeAdd({
+            name: "",
             type: drawingMode,
             position: storedPos,
             size: storedSize,
