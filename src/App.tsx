@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import type { AppState, FloorPlan, Point, Shape } from "./types";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { FloorPlanList } from "./components/FloorPlanList";
+import { ShapesList } from "./components/ShapesList";
 import { ImageUpload } from "./components/ImageUpload";
 import { Canvas } from "./components/Canvas";
 import { CalibrationDialog } from "./components/CalibrationDialog";
@@ -242,7 +243,7 @@ function App() {
   return (
     <div className="h-screen flex flex-col bg-gray-50">
       <div className="flex flex-1 overflow-hidden">
-        <div className="w-64 bg-gray-100 border-r border-gray-300">
+        <div className="w-64 bg-gray-100 border-r border-gray-300 flex flex-col">
           <FloorPlanList
             floorPlans={appState.floorPlans}
             activeFloorPlanId={appState.activeFloorPlanId}
@@ -250,6 +251,13 @@ function App() {
             onAddFloorPlan={handleAddFloorPlan}
             onDeleteFloorPlan={handleDeleteFloorPlan}
           />
+          {activeFloorPlan && (
+            <ShapesList
+              shapes={activeFloorPlan.shapes}
+              selectedShapeId={selectedShapeId}
+              onSelectShape={setSelectedShapeId}
+            />
+          )}
         </div>
 
         <div className="flex-1 flex flex-col">
